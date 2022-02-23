@@ -115,8 +115,6 @@ searchBtnElem.addEventListener("click", () => {
 });
 
 const searchCountryData = (data) => {
-  console.log(data);
-
   const cardContainer = document.querySelector(".card-container");
   // ======append html element=========
   const colMd3 = document.createElement("div");
@@ -131,4 +129,12 @@ const searchCountryData = (data) => {
                   <p class="card-text">Official Name: ${data.name.official}<br> Population: ${data.population}<br>
                   Short Name: ${data.cca2}<br> Short Name 2: ${data.cioc}</p>
                   <button onclick="getMore('${data.name.common}')"  class="btn btn-primary btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Learn More</button>`;
+};
+
+// ======= Show Full List Handler ========
+const fullList = () => {
+  searchFieldElem.value = "";
+  const cardContainerClear = document.querySelector(".card-container");
+  cardContainerClear.textContent = "";
+  catchApi();
 };
