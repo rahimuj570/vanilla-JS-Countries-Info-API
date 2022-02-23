@@ -96,3 +96,39 @@ const getMoreData = (data, name) => {
   cardDiv.appendChild(modalDiv);
   console.log(data);
 };
+
+// ============== Search Handler ============
+const searchFieldElem = document.getElementById("search-field");
+const searchBtnElem = document.querySelector(".search-btn");
+searchBtnElem.addEventListener("click", () => {
+  if (searchFieldElem.value != "") {
+    const cardContainerClear = document.querySelector(".card-container");
+    cardContainerClear.textContent = "";
+    console.log(searchFieldElem.value);
+    fetch(`https://restcountries.com/v3.1/name/${searchFieldElem.value}`)
+      .then((res) => res.json())
+      .then((data) => searchCountryData(data[0]))
+      .catch((error) =>
+        alert("Please Input Correct Spelling Of The Country Name")
+      );
+  }
+});
+
+const searchCountryData = (data) => {
+  console.log(data);
+
+  const cardContainer = document.querySelector(".card-container");
+  // ======append html element=========
+  const colMd3 = document.createElement("div");
+  colMd3.classList.add("col-md-4", "mb-5");
+  cardContainer.appendChild(colMd3);
+  // ======append html element end=========
+  colMd3.innerHTML = `
+      <div class="card" style="width: 18rem">
+                <img src="${data.flags.svg}" class="card-img-top" alt="..." />
+                <div class="card-body">
+                  <h5 class="fw-bold card-title">${data.name.common}</h5>
+                  <p class="card-text">Official Name: ${data.name.official}<br> Population: ${data.population}<br>
+                  Short Name: ${data.cca2}<br> Short Name 2: ${data.cioc}</p>
+                  <button onclick="getMore('${data.name.common}')"  class="btn btn-primary btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Learn More</button>`;
+};
