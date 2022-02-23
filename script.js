@@ -8,7 +8,7 @@ catchApi();
 const getCountryData = (countries) => {
   const cardContainer = document.querySelector(".card-container");
   countries.map((country) => {
-    console.log(country);
+    // console.log(country);
 
     // ======append html element=========
     const colMd3 = document.createElement("div");
@@ -22,9 +22,77 @@ const getCountryData = (countries) => {
                 <h5 class="fw-bold card-title">${country.name.common}</h5>
                 <p class="card-text">Official Name: ${country.name.official}<br> Population: ${country.population}<br>
                 Short Name: ${country.cca2}<br> Short Name 2: ${country.cioc}</p>
-                <a href="#" class="btn btn-primary">Learn More</a>
-              </div>
-            </div>
+                <button onclick="getMore('${country.name.common}')"  class="btn btn-primary btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Learn More</button>
+
+                
     `;
   });
+};
+
+// ==============Learn More Handler=========
+function getMore(name) {
+  fetch(`https://restcountries.com/v3.1/name/${name}`)
+    .then((res) => res.json())
+    .then((data) => getMoreData(data[0], name));
+}
+const getMoreData = (data, name) => {
+  const cardDiv = document.querySelector(".card");
+  const modalDiv = document.createElement("div");
+  modalDiv.innerHTML = `<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">More Information About <strong>${name}</strong></h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" ariapx-1 py-2 -label="Close"></button>
+      </div>
+      <div class="modal-body">
+  <div class="rounded px-1 py-2 bg-light d-flex justify-content-between">
+    <span class="fw-bold text-primary d-block">Capital:</span>
+    <span>${data.capital[0]}</span>
+  </div>
+  <div class="d-flex justify-content-between">
+    <span class="px-1 py-2 fw-bold text-primary d-block">Continents:</span>
+    <span>${data.continents[0]}}</span>
+  </div>
+  <div class="rounded px-1 py-2 bg-light d-flex justify-content-between">
+    <span class="fw-bold text-primary d-block">Subregion:</span>
+    <span>${data.subregion}</span>
+  </div>
+  <div class="d-flex justify-content-between">
+    <span class="px-1 py-2 fw-bold text-primary d-block">Currencies:</span>
+    <span>${data.capital[0]}</span>
+  </div>
+  <div class="rounded px-1 py-2 bg-light d-flex justify-content-between">
+    <span class="fw-bold text-primary d-block">Capital:</span>
+    <span>${Object.values(data.currencies)[0].name}
+        (${Object.values(data.currencies)[0].symbol})</span>
+  </div>
+  <div class="d-flex justify-content-between">
+    <span class="px-1 py-2 fw-bold text-primary d-block">Independent Status:</span>
+    <span>${data.independent}</span>
+  </div>
+  <div class="rounded px-1 py-2 bg-light d-flex justify-content-between">
+    <span class="fw-bold text-primary d-block">Week Start On:</span>
+    <span>${data.startOfWeek}</span>
+  </div>
+  <div class="d-flex justify-content-between">
+    <span class="px-1 py-2 fw-bold text-primary d-block">Time Zone:</span>
+    <span>${data.timezones[0]}</span>
+  </div>
+  <div class="rounded px-1 py-2 bg-light d-flex justify-content-between">
+    <span class="fw-bold text-primary d-block">Top Level Domain:</span>
+    <span>${data.tld[0]}</span>
+  </div>
+</div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        
+      </div>
+    </div>
+  </div>
+</div>
+              </div>
+            </div>`;
+  cardDiv.appendChild(modalDiv);
+  console.log(data);
 };
